@@ -44,7 +44,9 @@ public class PlayerMove : MonoBehaviour
 
         //saltar
         if (Input.GetButtonDown("Jump") && IsGrounded)
-            movimento.y = Mathf.Sqrt(VelocidadeSalto * Physics.gravity.y);
+			//Bug corrigido em 10/10/2022: faltava multiplicar por Time.deltaTime
+            movimento.y = Mathf.Sqrt(VelocidadeSalto * Physics.gravity.y) * Time.deltaTime;
+		
 
         //aplicar gravidade
         movimento += Physics.gravity * Time.deltaTime;
