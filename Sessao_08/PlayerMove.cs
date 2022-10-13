@@ -18,6 +18,7 @@ public class PlayerMove : MonoBehaviour
     public float _inputAndar;
     public bool IsGrounded;
     public bool IsJumping = false;
+    Vector3 _velocidade;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,21 +42,22 @@ public class PlayerMove : MonoBehaviour
             _inputAndar *= 2;
 
         Vector3 movimento = transform.forward * _inputAndar * VelocidadeAndar * Time.deltaTime;
+        _characterController.Move(movimento);
 
         //saltar
         if (Input.GetButtonDown("Jump") && IsGrounded)
         {
-            movimento.y = Mathf.Sqrt(VelocidadeSalto * Physics.gravity.y)*Time.deltaTime;
+            _velocidade.y = Mathf.Sqrt(VelocidadeSalto * Physics.gravity.y);
             IsJumping = true;
         }
         else
         {
             IsJumping = false;
+            _velocidade += Physics.gravity * Time.deltaTime;
         }
 
         //aplicar gravidade
-        movimento += Physics.gravity * Time.deltaTime;
-        _characterController.Move(movimento);
+        _characterController.Move(_velocidade * Time.deltaTime);
 
 
         IsGrounded = _characterController.isGrounded;
